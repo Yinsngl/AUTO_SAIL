@@ -1,0 +1,47 @@
+/*
+ * @file sg90.c 
+ * @brief 舵机控制实现
+ */
+#include "sg90.h"
+#include "tim.h"
+
+/* @brief 控制舵机的Timer*/
+#define SG90_TIM &htim2
+/* @brief 控制舵机的Timer通道*/
+#define SG90_CHANNEL TIM_CHANNEL_2
+
+/* @brief 舵机周期（单位：ms）*/
+#define SG90_PERIOD 20
+/* @brief 舵机最小占空比（百分比）*/
+#define SG90_MIN_DUTY 2.5f
+/* @brief 舵机最大占空比（百分比）*/
+#define SG90_MAX_DUTY 12.5f
+/* 
+ * @brief 舵机占空比修正值（百分比）
+ * @note 该值根据实际角度与预期偏转角度差值进行调整
+ */
+#define SG90_MODIFER 0.2f
+/* @brief 舵机初始占空比（百分比）*/
+#define SG90_INIT_DUTY 7.5f
+
+/* 
+ * @brief 舵机初始化函数 
+ */
+void SG90_Init(void)
+{
+	HAL_TIM_PWM_Start(SG90_TIM, SG90_CHANNEL);
+	SG90_SetAngle(SG90_INIT_DUTY);
+}
+
+/* 
+ * @brief 设置舵机角度函数
+ * @param duty 占空比值，范围在2.5到12.5之间
+ */
+void SG90_SetAngle(float duty)
+{
+	if (duty > SG90_MAX_DUTY || duty < SG90_MIN_DUTY)
+	{
+		return;
+	}
+    __HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (uint32_t)((duty + SG90_MODIFER) * SG90_PERIOD));
+}
