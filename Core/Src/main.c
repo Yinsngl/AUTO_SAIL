@@ -45,7 +45,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int speed = 100; //前进速度
+float angle = 90; //舵机角度
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -92,11 +93,14 @@ int main(void)
   MX_TIM4_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  DRV8833_Init();
+  SG90_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  DRV8833_Forward(speed);
+  SG90_SetAngle(angle);
   while (1)
   {
     /* USER CODE END WHILE */

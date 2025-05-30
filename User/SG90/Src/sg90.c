@@ -1,6 +1,7 @@
 /*
  * @file sg90.c 
  * @brief 舵机控制实现
+ * @note 舵机控制PWM信号频率50Hz，占空比范围2.5%到12.5%
  */
 #include "sg90.h"
 #include "tim.h"
@@ -25,6 +26,18 @@
 #define SG90_INIT_DUTY 7.5f
 
 /* 
+ * @brief 设置舵机控制PWM占空比
+ * @param duty 占空比值，范围在2.5到12.5之间
+ */
+static inline void __SG90_SetDuty(float duty)
+{
+	if (duty <= SG90_MAX_DUTY && duty >= SG90_MIN_DUTY)
+	{
+		__HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (uint32_t)((duty + SG90_MODIFER) * SG90_PERIOD));
+	}
+}
+
+/* 
  * @brief 舵机初始化函数 
  */
 void SG90_Init(void)
@@ -33,15 +46,18 @@ void SG90_Init(void)
 	SG90_SetAngle(SG90_INIT_DUTY);
 }
 
-/* 
- * @brief 设置舵机角度函数
- * @param duty 占空比值，范围在2.5到12.5之间
+/*
+ * @brief 设置舵机角度
+ * @param angle 舵机角度，0-180之间，90度为正
  */
-void SG90_SetAngle(float duty)
+void SG90_SetAngle(float angle)
 {
-	if (duty > SG90_MAX_DUTY || duty < SG90_MIN_DUTY)
+	if (angle < 0 || angle > 180)
 	{
 		return;
 	}
-    __HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (uint32_t)((duty + SG90_MODIFER) * SG90_PERIOD));
+
+	float duty = (angle / 18) + 2.5;
+	__SG90_SetDuty(duty);
+	return;
 }
