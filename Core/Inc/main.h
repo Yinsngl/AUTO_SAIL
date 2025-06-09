@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define LED_Pin GPIO_PIN_13
+#define LED_GPIO_Port GPIOC
 #define SG90_Pin GPIO_PIN_1
 #define SG90_GPIO_Port GPIOA
 #define IRM_1_Pin GPIO_PIN_4
@@ -86,10 +88,6 @@ void Error_Handler(void);
 #define IRM_9_Pin GPIO_PIN_12
 #define IRM_9_GPIO_Port GPIOA
 #define IRM_9_EXTI_IRQn EXTI15_10_IRQn
-#define DRV8833_IN1_Pin GPIO_PIN_6
-#define DRV8833_IN1_GPIO_Port GPIOB
-#define DRV8833_IN2_Pin GPIO_PIN_7
-#define DRV8833_IN2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

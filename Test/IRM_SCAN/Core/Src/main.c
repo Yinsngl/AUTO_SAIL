@@ -23,8 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -34,8 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define TRUE 1
-#define FALSE 0
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,28 +55,54 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void IRM_Process(int port)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  char msg[20];
-  sprintf(msg, "IRM:%d", port);
-  HAL_UART_Transmit_IT(&huart2, (uint8_t*)msg, sizeof(msg));
-}
-
-void IRM_Scan(void)
-{
-  if (!HAL_GPIO_ReadPin(IRM_1_GPIO_Port, IRM_1_Pin))
+  if (GPIO_Pin == IRM_1_Pin)
   {
-    IRM_Process(1);
+    HAL_UART_Transmit(&huart2, "1", sizeof("1"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
   }
-  if (!HAL_GPIO_ReadPin(IRM_2_GPIO_Port, IRM_2_Pin))
+  if (GPIO_Pin == IRM_2_Pin)
   {
-    IRM_Process(1);
+    HAL_UART_Transmit(&huart2, "2", sizeof("2"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
   }
-
-  
-  return;
+  if (GPIO_Pin == IRM_3_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "3", sizeof("3"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_4_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "4", sizeof("4"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_5_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "5", sizeof("5"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_6_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "6", sizeof("6"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_7_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "7", sizeof("7"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_8_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "8", sizeof("8"), 1000); 
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
+  if (GPIO_Pin == IRM_9_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "9", sizeof("9"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+  }
 }
-
 /* USER CODE END 0 */
 
 /**

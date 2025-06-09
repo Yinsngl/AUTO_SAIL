@@ -1,20 +1,4 @@
 /* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -23,51 +7,78 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void IRM_Process(int port)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  char msg[20];
-  sprintf(msg, "IRM:%d", port);
-  HAL_UART_Transmit_IT(&huart2, (uint8_t*)msg, sizeof(msg));
-}
-
-void HAL_GPIO_EXIT_Callback(GPIO_TypeDef* GPIO_Pin)
-{
-  if (GPIO_Pin == IRM_1_GPIO_Port)
+  if (GPIO_Pin == IRM_1_Pin)
   {
-    IRM_Process(1);
+    HAL_UART_Transmit(&huart2, "1", sizeof("1"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_2_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "2", sizeof("2"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_3_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "3", sizeof("3"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_4_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "4", sizeof("4"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_5_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "5", sizeof("5"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_6_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "6", sizeof("6"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_7_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "7", sizeof("7"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_8_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "8", sizeof("8"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_9_Pin)
+  {
+    HAL_UART_Transmit(&huart2, "9", sizeof("9"), 1000);
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
   }
 }
 /* USER CODE END 0 */
@@ -80,7 +91,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -89,27 +99,29 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Transmit(&huart2, (uint8_t*) "REBOOT", sizeof("REBOOT"), 1000);
   while (1)
   {
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED on PC13
+    HAL_Delay(500); // Delay for 500 ms to see the toggle effect
+    
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -157,7 +169,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /**
@@ -167,11 +178,6 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -186,8 +192,6 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

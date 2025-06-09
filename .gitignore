@@ -1,4 +1,5 @@
 /.obsidian
+/.vscode
 /MDK-ARM/.vscode
 /MDK-ARM/AUTO_SAIL
 /MDK-ARM/DebugConfig
@@ -11,3 +12,4 @@
 /Test/IRM_SCAN/MDK-ARM/DebugConfig
 /Test/IRM_SCAN/MDK-ARM/RTE
 /Test/IRM_SCAN/MDK-ARM/IRM_SCAN
+/MDK-ARM/AUTO_SAIL.uvguix.Iris

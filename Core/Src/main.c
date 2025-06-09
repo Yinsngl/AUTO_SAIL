@@ -24,7 +24,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sg90.h"
+#include "drv8833.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,8 +46,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int speed = 100; //前进速度
-float angle = 90; //舵机角度
+float angle = 90;//舵机角度
+uint8_t speed = 50;//电机速度
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,7 +58,57 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
 
+  // 这里用来处理每个红外管收到信号后的操作
+  // IRM_1_Pin--IRM_9_Pin分别对应PA3-PA12管脚
+  if (GPIO_Pin == IRM_1_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"1", sizeof("1"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_2_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"2", sizeof("2"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_3_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"3", sizeof("3"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_4_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"4", sizeof("4"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_5_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"5", sizeof("5"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_6_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"6", sizeof("6"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_7_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"7", sizeof("7"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_8_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"8", sizeof("8"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+  if (GPIO_Pin == IRM_9_Pin)
+  {
+    HAL_UART_Transmit(&huart2, (uint8_t*)"9", sizeof("9"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -89,20 +140,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART2_UART_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
-  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  DRV8833_Init();
   SG90_Init();
+  DRV8833_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  DRV8833_Forward(speed);
+  HAL_UART_Transmit(&huart2, (uint8_t*) "REBOOT", sizeof("REBOOT"), 1000);
   SG90_SetAngle(angle);
+  DRV8833_Forward(speed);
   while (1)
   {
+
+    // 核心板上LED以1s为周期闪烁，表示程序正常运行
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
+    HAL_Delay(500); 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -122,10 +178,13 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -135,12 +194,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }

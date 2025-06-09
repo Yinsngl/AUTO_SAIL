@@ -59,6 +59,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define IRM_1_Pin GPIO_PIN_4
 #define IRM_1_GPIO_Port GPIOA
+#define IRM_1_EXTI_IRQn EXTI4_IRQn
 #define IRM_2_Pin GPIO_PIN_5
 #define IRM_2_GPIO_Port GPIOA
 #define IRM_2_EXTI_IRQn EXTI9_5_IRQn

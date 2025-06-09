@@ -203,7 +203,7 @@
 
   <Group>
     <GroupName>Application/User/Core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -478,7 +478,7 @@
   </Group>
 
   <Group>
-    <GroupName>User</GroupName>
+    <GroupName>Application/User/Driver</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -490,8 +490,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\DRV8833\Src\drv8833.c</PathWithFileName>
-      <FilenameWithoutPath>drv8833.c</FilenameWithoutPath>
+      <PathWithFileName>..\User\SG90\Src\sg90.c</PathWithFileName>
+      <FilenameWithoutPath>sg90.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -502,8 +502,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\User\SG90\Src\sg90.c</PathWithFileName>
-      <FilenameWithoutPath>sg90.c</FilenameWithoutPath>
+      <PathWithFileName>..\User\DRV8833\Src\drv8833.c</PathWithFileName>
+      <FilenameWithoutPath>drv8833.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
