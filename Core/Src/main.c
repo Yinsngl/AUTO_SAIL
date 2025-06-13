@@ -152,7 +152,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   HAL_UART_Transmit(&huart2, (uint8_t*) "REBOOT", sizeof("REBOOT"), 1000);
   SG90_SetAngle(angle);
-  DRV8833_Forward(speed);
+  DRV8833_Forward(speed); // 开始前进
   while (1)
   {
 
