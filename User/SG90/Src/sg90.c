@@ -48,7 +48,7 @@ void __SG90_SetDuty(float duty)
 void SG90_Init(void)
 {
 	HAL_TIM_PWM_Start(SG90_TIM, SG90_CHANNEL);
-	SG90_SetAngle(SG90_INIT_DUTY);
+	__SG90_SetDuty(SG90_INIT_DUTY);
 }
 
 /*
