@@ -159,6 +159,13 @@ int main(void)
     // 核心板上LED以1s为周期闪烁，表示程序正常运行
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
     HAL_Delay(500); 
+    SG90_SetAngle(2.5f);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
+    HAL_Delay(500); 
+    SG90_SetAngle(7.5f);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
+    HAL_Delay(500); 
+    SG90_SetAngle(12.5f);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -21,9 +21,14 @@
  * @brief 舵机占空比修正值（百分比）
  * @note 该值根据实际角度与预期偏转角度差值进行调整
  */
-#define SG90_MODIFER 0.2f
+#define SG90_MODIFER 0.0f
 /* @brief 舵机初始占空比（百分比）*/
-#define SG90_INIT_DUTY 7.5f
+#define SG90_INIT_DUTY 7.5f //这里你们试一下设成多少舵是正的
+/* @brief 舵机向左转向时的占空比（百分比）*/
+#define SG90_LEFT_DUTY 0.0f //这里是左转的时候设置的角度
+/* @brief 舵机向左转向时的占空比（百分比）*/
+#define SG90_RIGHT_DUTY 0.0f //这里是右转的时候的角度
+//注意上面三个角度必须在数值必须在2.5到12.5之间
 
 /* 
  * @brief 设置舵机控制PWM占空比
@@ -60,4 +65,14 @@ void SG90_SetAngle(float angle)
 	float duty = (angle / 18) + 2.5;
 	__SG90_SetDuty(duty);
 	return;
+}
+
+void SG90_TurnLeft()
+{
+	SG90_SetAngle(SG90_LEFT_DUTY);
+}
+
+void SG90_TurnRight()
+{
+	SG90_SetAngle(SG90_RIGHT_DUTY);
 }

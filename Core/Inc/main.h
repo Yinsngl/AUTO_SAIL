@@ -88,6 +88,10 @@ void Error_Handler(void);
 #define IRM_9_Pin GPIO_PIN_12
 #define IRM_9_GPIO_Port GPIOA
 #define IRM_9_EXTI_IRQn EXTI15_10_IRQn
+#define DRV8833_IN2_Pin GPIO_PIN_6
+#define DRV8833_IN2_GPIO_Port GPIOB
+#define DRV8833_IN2B7_Pin GPIO_PIN_7
+#define DRV8833_IN2B7_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
