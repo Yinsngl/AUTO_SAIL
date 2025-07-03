@@ -35,7 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define MAX_SPEED 100 // 最大速度值
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -161,12 +161,19 @@ int main(void)
 
     // 核心板上LED以1s为周期闪烁，表示程序正常运行
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-    __SG90_SetDuty(duty);
-    duty += 1;
-    if (duty >= 12.5)
+    SG90_SetAngle(angle); // 设置舵机角度
+    angle += 10;
+    if (angle >= 180) // 如果角度超过180，重置为0
     {
-      duty = 2.5;
+      angle = 0;
     }
+    DRV8833_Forward(speed); // 控制电机前进
+    speed += 10; // 增加速度
+    if (speed > MAX_SPEED) // 如果速度超过MAX_SPEED，重置为0
+    {
+      speed = 0;
+    }
+    HAL_Delay(1000); // 延时1秒
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

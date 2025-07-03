@@ -19,10 +19,16 @@ void SG90_Init(void);
  * @brief 设置舵机角度
  * @param angle 舵机角度，0-180之间，90度为正
  */
-void SG90_SetAngle(float angle);
+void SG90_SetAngle(int angle);
 
-void SG90_TurnLeft();
+/* 
+ * @brief 舵机向左转向
+ */
+void SG90_TurnLeft(void);
 
-void SG90_TurnRight();
+/* 
+ * @brief 舵机向右转向
+ */
+void SG90_TurnRight(void);
 
 #endif /* __SG90_H__ */
