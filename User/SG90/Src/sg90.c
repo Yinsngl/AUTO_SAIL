@@ -34,7 +34,7 @@
  * @brief 设置舵机控制PWM占空比
  * @param duty 占空比值，范围在2.5到12.5之间
  */
-static inline void __SG90_SetDuty(float duty)
+void __SG90_SetDuty(float duty)
 {
 	if (duty <= SG90_MAX_DUTY && duty >= SG90_MIN_DUTY)
 	{
@@ -69,10 +69,10 @@ void SG90_SetAngle(float angle)
 
 void SG90_TurnLeft()
 {
-	SG90_SetAngle(SG90_LEFT_DUTY);
+	__SG90_SetDuty(SG90_LEFT_DUTY);
 }
 
 void SG90_TurnRight()
 {
-	SG90_SetAngle(SG90_RIGHT_DUTY);
+	__SG90_SetDuty(SG90_RIGHT_DUTY);
 }

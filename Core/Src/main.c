@@ -153,19 +153,20 @@ int main(void)
   HAL_UART_Transmit(&huart2, (uint8_t*) "REBOOT", sizeof("REBOOT"), 1000);
   SG90_SetAngle(angle);
   DRV8833_Forward(speed); // 开始前进
+
+  float duty = 2.5f;
+
   while (1)
   {
 
     // 核心板上LED以1s为周期闪烁，表示程序正常运行
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-    HAL_Delay(1000); 
-    SG90_SetAngle(2.5f);
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-    HAL_Delay(1000); 
-    SG90_SetAngle(7.5f);
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-    HAL_Delay(1000); 
-    SG90_SetAngle(12.5f);
+    __SG90_SetDuty(duty);
+    duty += 1;
+    if (duty >= 12.5)
+    {
+      duty = 2.5;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
