@@ -48,6 +48,7 @@
 /* USER CODE BEGIN PV */
 float angle = 90;//舵机角度
 uint8_t speed = 50;//电机速度
+int fstFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,11 +68,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
     HAL_UART_Transmit(&huart2, (uint8_t*)"1", sizeof("1"), 1000);
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    
   }
   if (GPIO_Pin == IRM_2_Pin)
   {
     HAL_UART_Transmit(&huart2, (uint8_t*)"2", sizeof("2"), 1000);
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnRight();
   }
   if (GPIO_Pin == IRM_3_Pin)
   {
@@ -102,6 +105,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
     HAL_UART_Transmit(&huart2, (uint8_t*)"8", sizeof("8"), 1000);
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnLeft();
+    HAL_Delay(20);
+    if (HAL_GPIO_ReadPin(IRM_8_GPIO_Port, IRM_8_Pin) == GPIO_PIN_SET)
+    return;
   }
   if (GPIO_Pin == IRM_9_Pin)
   {
@@ -151,7 +158,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_UART_Transmit(&huart2, (uint8_t*) "REBOOT", sizeof("REBOOT"), 1000);
-  SG90_SetAngle(angle);
+  // SG90_SetAngle(angle);
   DRV8833_Forward(speed); // 开始前进
 
   float duty = 2.5f;
@@ -159,21 +166,30 @@ int main(void)
   while (1)
   {
 
-    // 核心板上LED以1s为周期闪烁，表示程序正常运行
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-    SG90_SetAngle(angle); // 设置舵机角度
-    angle += 10;
-    if (angle >= 180) // 如果角度超过180，重置为0
-    {
-      angle = 0;
-    }
-    DRV8833_Forward(speed); // 控制电机前进
-    speed += 10; // 增加速度
-    if (speed > MAX_SPEED) // 如果速度超过MAX_SPEED，重置为0
-    {
-      speed = 0;
-    }
-    HAL_Delay(1000); // 延时1秒
+    // // 核心板上LED以1s为周期闪烁，表示程序正常运行
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
+    // SG90_SetAngle(angle); // 设置舵机角度
+    // angle += 10;
+    // if (angle >= 180) // 如果角度超过180，重置为0
+    // {
+    //   angle = 0;
+    // }
+    // DRV8833_Forward(speed); // 控制电机前进
+    // speed += 10; // 增加速度
+    // if (speed > MAX_SPEED) // 如果速度超过MAX_SPEED，重置为0
+    // {
+    //   speed = 0;
+    // }
+    // HAL_Delay(1000); // 延时1秒
+
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    // SG90_TurnLeft(); // 向左转
+    // HAL_Delay(1000); // 延时1秒
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    // SG90_TurnRight(); // 向右转
+    // HAL_Delay(1000); // 延时1秒
+    // SG90_SetAngle(180); // 设置舵机角度居中
+    // HAL_Delay(1000); // 延时1秒
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

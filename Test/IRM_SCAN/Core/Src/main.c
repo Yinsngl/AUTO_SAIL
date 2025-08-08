@@ -18,12 +18,16 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sg90.h"
+#include "drv8833.h"
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+char msg[20];
+int speed = 100;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,53 +60,200 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void IRM_Scan()
 {
-  if (GPIO_Pin == IRM_1_Pin)
+  // if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET)
+  // {
+  //   HAL_Delay(10);
+  //   if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET && HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET) return;
+
+  //   HAL_UART_Transmit(&huart2, (uint8_t*)"3", sizeof("3"), 1000);
+  //   HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //   SG90_TurnRight();
+  //   HAL_Delay(20);
+  // }
+
+  // if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET)
+  // {
+  //   HAL_Delay(10);
+  //   if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET && HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET) return;
+
+  //   HAL_UART_Transmit(&huart2, (uint8_t*)"7", sizeof("7"), 1000);
+  //   HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //   SG90_TurnLeft();
+  //   HAL_Delay(20);
+  // }
+
+  // if (HAL_GPIO_ReadPin(IRM_5_GPIO_Port, IRM_5_Pin) == GPIO_PIN_RESET)
+  // {
+  //   HAL_UART_Transmit(&huart2, (uint8_t*)"5", sizeof("5"), 1000);
+  //   // int cmp;
+  //   // cmp = __HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_2);
+  //   // char tmp[10];
+  //   // sprintf(tmp, "\nCMP:%d\n", cmp);
+  //   // HAL_UART_Transmit(&huart2, (uint8_t*)tmp, strlen(tmp), HAL_MAX_DELAY);
+  //   HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  // }
+  if (HAL_GPIO_ReadPin(IRM_6_GPIO_Port, IRM_6_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "1", sizeof("1"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"6", sizeof("6"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnRight();
+		HAL_Delay(50);
   }
-  if (GPIO_Pin == IRM_2_Pin)
+  if (HAL_GPIO_ReadPin(IRM_4_GPIO_Port, IRM_4_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "2", sizeof("2"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"4", sizeof("4"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnLeft();
+		HAL_Delay(30);
   }
-  if (GPIO_Pin == IRM_3_Pin)
+  if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "3", sizeof("3"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET) return;
+    HAL_UART_Transmit(&huart2, (uint8_t*)"7", sizeof("7"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnLeft();
+		HAL_Delay(40);
   }
-  if (GPIO_Pin == IRM_4_Pin)
+  if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "4", sizeof("4"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET) return;
+    HAL_UART_Transmit(&huart2, (uint8_t*)"3", sizeof("3"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnRight();
+		HAL_Delay(60);
   }
-  if (GPIO_Pin == IRM_5_Pin)
+  if (HAL_GPIO_ReadPin(IRM_2_GPIO_Port, IRM_2_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "5", sizeof("5"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"2", sizeof("2"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnLeft();
+		HAL_Delay(20);
   }
-  if (GPIO_Pin == IRM_6_Pin)
+  if (HAL_GPIO_ReadPin(IRM_8_GPIO_Port, IRM_8_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "6", sizeof("6"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"8", sizeof("8"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    SG90_TurnRight();
+		HAL_Delay(40);
   }
-  if (GPIO_Pin == IRM_7_Pin)
+  if (HAL_GPIO_ReadPin(IRM_1_GPIO_Port, IRM_1_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "7", sizeof("7"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"1", sizeof("1"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+		SG90_TurnLeft();
+		HAL_Delay(10);
   }
-  if (GPIO_Pin == IRM_8_Pin)
+  if (HAL_GPIO_ReadPin(IRM_9_GPIO_Port, IRM_9_Pin) == GPIO_PIN_RESET)
   {
-    HAL_UART_Transmit(&huart2, "8", sizeof("8"), 1000); 
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
+    HAL_UART_Transmit(&huart2, (uint8_t*)"9", sizeof("9"), 1000);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on
+		SG90_TurnRight();
+		HAL_Delay(20);
   }
-  if (GPIO_Pin == IRM_9_Pin)
-  {
-    HAL_UART_Transmit(&huart2, "9", sizeof("9"), 1000);
-    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); 
-  }
+
+  // if (HAL_GPIO_ReadPin(IRM_4_GPIO_Port, IRM_4_Pin) == GPIO_PIN_RESET)
+  // {
+  //   // if (HAL_GPIO_ReadPin(IRM_6_GPIO_Port, IRM_6_Pin) != GPIO_PIN_RESET)
+  //   // {
+  //   //   HAL_UART_Transmit(&huart2, (uint8_t*)"4", sizeof("4"), 1000);
+  //   //   HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //   //   //SG90_TurnRight();//
+  //   //   HAL_Delay(50);
+  //   // }
+  //   // else
+  //   {
+  //     if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) == GPIO_PIN_RESET)
+  //     {
+  //       if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) != GPIO_PIN_RESET)
+  //       {
+  //         HAL_UART_Transmit(&huart2, (uint8_t*)"3", sizeof("3"), 1000);
+  //         HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //         SG90_TurnRight();//
+  //         HAL_Delay(50);
+  //       }
+  //       else
+  //       {
+  //         if (HAL_GPIO_ReadPin(IRM_2_GPIO_Port, IRM_2_Pin) == GPIO_PIN_RESET)
+  //         {
+  //           if (HAL_GPIO_ReadPin(IRM_8_GPIO_Port, IRM_8_Pin) != GPIO_PIN_RESET)
+  //           {
+  //             HAL_UART_Transmit(&huart2, (uint8_t*)"2", sizeof("2"), 1000);
+  //             HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //             SG90_TurnRight();//
+  //             HAL_Delay(50);
+  //           }
+  //           else
+  //           {
+  //             if (HAL_GPIO_ReadPin(IRM_1_GPIO_Port, IRM_1_Pin) == GPIO_PIN_RESET)
+  //             {
+  //               if (HAL_GPIO_ReadPin(IRM_9_GPIO_Port, IRM_9_Pin) != GPIO_PIN_RESET)
+  //               {
+  //                 HAL_UART_Transmit(&huart2, (uint8_t*)"1", sizeof("1"), 1000);
+  //                 HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //                 SG90_TurnRight();//
+  //                 HAL_Delay(50);
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // if (HAL_GPIO_ReadPin(IRM_6_GPIO_Port, IRM_6_Pin) == GPIO_PIN_RESET)
+  // {
+  //   // if (HAL_GPIO_ReadPin(IRM_4_GPIO_Port, IRM_4_Pin) != GPIO_PIN_RESET)
+  //   // {
+  //   //   HAL_UART_Transmit(&huart2, (uint8_t*)"6", sizeof("6"), 1000);
+  //   //   HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //   //   //SG90_TurnLeft();//
+  //   //   HAL_Delay(50);
+  //   // }
+  //   // else
+  //   {
+  //     if (HAL_GPIO_ReadPin(IRM_7_GPIO_Port, IRM_7_Pin) == GPIO_PIN_RESET)
+  //     {
+  //       if (HAL_GPIO_ReadPin(IRM_3_GPIO_Port, IRM_3_Pin) != GPIO_PIN_RESET)
+  //       {
+  //         HAL_UART_Transmit(&huart2, (uint8_t*)"7", sizeof("7"), 1000);
+  //         HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //         SG90_TurnLeft();//
+  //         HAL_Delay(50);
+  //       }
+  //       else
+  //       {
+  //         if (HAL_GPIO_ReadPin(IRM_8_GPIO_Port, IRM_8_Pin) == GPIO_PIN_RESET)
+  //         {
+  //           if (HAL_GPIO_ReadPin(IRM_2_GPIO_Port, IRM_2_Pin) != GPIO_PIN_RESET)
+  //           {
+  //             HAL_UART_Transmit(&huart2, (uint8_t*)"8", sizeof("8"), 1000);
+  //             HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //             SG90_TurnLeft();//
+  //             HAL_Delay(50);
+  //           }
+  //           else
+  //           {
+  //             if (HAL_GPIO_ReadPin(IRM_9_GPIO_Port, IRM_9_Pin) == GPIO_PIN_RESET)
+  //             {
+  //               if (HAL_GPIO_ReadPin(IRM_1_GPIO_Port, IRM_1_Pin) != GPIO_PIN_RESET)
+  //               {
+  //                 HAL_UART_Transmit(&huart2, (uint8_t*)"9", sizeof("9"), 1000);
+  //                 HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+  //                 SG90_TurnLeft();//
+  //                 HAL_Delay(50);
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  
 }
 /* USER CODE END 0 */
 
@@ -135,15 +287,49 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_TIM2_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_UART_Transmit(&huart2, (uint8_t*)"REBOOT", sizeof("REBOOT"), 1000);
+  SG90_Init();
+	DRV8833_Init();
+	DRV8833_Forward(speed);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // SG90_TurnLeft();
+    // HAL_Delay(1000);
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    // HAL_UART_Transmit(&huart2, (uint8_t*)"LEFT", sizeof("LEFT"), 1000);
+    // SG90_Reset();
+    // HAL_Delay(500);
+    // SG90_TurnRight();
+    // HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Toggle the LED on PC13
+    // HAL_Delay(1000);
+    // HAL_UART_Transmit(&huart2, (uint8_t*)"RIGHT", sizeof("RIGHT"), 1000);
+    // SG90_Reset();
+    // HAL_Delay(500);
+
+    #ifdef SHEEPNUM
     IRM_Scan();
+    SG90_Reset();
+    #endif
+
+    // SG90_Reset();
+    #ifdef SHEEPNUM == 2
+    // SG90_TurnRight();
+    // HAL_Delay(1000);
+    // SG90_Reset();
+    // HAL_Delay(1000);
+    // SG90_TurnLeft();
+    // HAL_Delay(1000);
+    // SG90_Reset();
+    // HAL_Delay(1000);
+    #endif
+   
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

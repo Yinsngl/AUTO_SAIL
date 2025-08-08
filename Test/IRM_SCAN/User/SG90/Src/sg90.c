@@ -25,12 +25,32 @@
  * @note 该值根据实际角度与预期偏转角度差值进行调整
  */
 #define SG90_MODIFER 0.0f
+
+#if SHEEPNUM == 1
+/* 
+ * @brief 船1对应参数
+ */
+
 /* @brief 舵机初始角度*/
-#define SG90_INIT_ANGLE 150 //这里你们试一下设成多少舵是正的
+#define SG90_INIT_ANGLE 150 
 /* @brief 舵机向左转向时的角度*/
-#define SG90_LEFT_ANGLE 115 //这里是左转的时候设置的角度
+#define SG90_LEFT_ANGLE 180
 /* @brief 舵机向右转向时的角度*/
-#define SG90_RIGHT_ANGLE 180 //这里是右转的时候的角度
+#define SG90_RIGHT_ANGLE 115
+#endif	
+
+#if SHEEPNUM == 2
+/* 
+ * @brief 船2对应参数
+ */	
+
+/* @brief 舵机初始角度*/
+#define SG90_INIT_ANGLE 30
+/* @brief 舵机向左转向时的角度*/
+#define SG90_LEFT_ANGLE 80
+/* @brief 舵机向右转向时的角度*/
+#define SG90_RIGHT_ANGLE 0
+#endif
 
 #define SG90_INIT_DUTY (SG90_INIT_ANGLE / 18.0f) + 2.5
 
@@ -44,8 +64,8 @@ uint32_t defaultCMP = (uint32_t)((SG90_INIT_DUTY + SG90_MODIFER) * SG90_PERIOD);
  */
 void __SG90_SetDuty(float duty)
 {
-
-
+	/*
+	#if SHEEPNUM == 1
 	uint32_t cmp = __HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_2);
 	int direction = 1;
 	if (cmp > defaultCMP)
@@ -75,8 +95,14 @@ void __SG90_SetDuty(float duty)
 	__HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (duty + SG90_MODIFER) * SG90_PERIOD);
 	else if (direction != turn)
 	__HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (SG90_INIT_DUTY + SG90_MODIFER) * SG90_PERIOD);
+	#endif
 
+	#if SHEEPNUM == 2
+	*/
+	__HAL_TIM_SET_COMPARE(SG90_TIM, SG90_CHANNEL, (duty + SG90_MODIFER) * SG90_PERIOD);
+	// #endif
 }
+
 /* 
  * @brief 舵机初始化函数 
  */
